@@ -1,0 +1,15 @@
+# Runner is on the same machine as the deployment (shortcut).
+name: Vite build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - run: git -C ~/projects/prosek.club pull
+    - run: npm --prefix ./projects/prosek.club ci
+    - run: npm --prefix ./projects/prosek.club run build
+    - run: echo ${{ secrets.SUDO_PASSWORD }} | sudo -S cp ~/projects/prosek.club/dist /var/www/html/prosek.club
